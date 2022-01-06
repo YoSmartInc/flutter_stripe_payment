@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.jonasbark.stripepayment.StripeDialog;
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.PluginRegistry;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -119,7 +120,7 @@ public class StripeModule extends ReactContextBaseJavaModule {
     }
   };
 
-  public StripeModule(PluginRegistry.Registrar registrar, Activity activity) {
+  public StripeModule(ActivityPluginBinding registrar, Activity activity) {
     super(activity, registrar);
     registrar.addActivityResultListener(mActivityEventListener);
 

@@ -1,78 +1,101 @@
 package de.jonasbark.stripepayment
 
+import androidx.annotation.NonNull
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReadableMap
 import com.gettipsi.stripe.StripeModule
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry.Registrar
+import java.io.Serializable
 
-class StripePaymentPlugin(private val stripeModule: StripeModule) : MethodCallHandler {
+class StripePaymentPlugin: FlutterPlugin,
+    MethodChannel.MethodCallHandler,ActivityAware {
+    private var channel: MethodChannel? = null
+    private var stripeModule: StripeModule? = null
 
-    override fun onMethodCall(call: MethodCall, result: Result) {
+    override fun onMethodCall(call: MethodCall,result: MethodChannel.Result) {
         when (call.method) {
-            "setOptions" -> stripeModule.init(
+            "setOptions" -> stripeModule?.init(
                 ReadableMap(call.argument("options")),
                 ReadableMap(call.argument("errorCodes"))
             )
-            "setStripeAccount" -> stripeModule.setStripeAccount(
+            "setStripeAccount" -> stripeModule?.setStripeAccount(
                 call.argument("stripeAccount")
             )
-            "deviceSupportsAndroidPay" -> stripeModule.deviceSupportsAndroidPay(Promise(result));
-            "canMakeAndroidPayPayments" -> stripeModule.canMakeAndroidPayPayments(Promise(result));
-            "paymentRequestWithAndroidPay" -> stripeModule.paymentRequestWithAndroidPay(
+            "deviceSupportsAndroidPay" -> stripeModule?.deviceSupportsAndroidPay(Promise(result));
+            "canMakeAndroidPayPayments" -> stripeModule?.canMakeAndroidPayPayments(Promise(result));
+            "paymentRequestWithAndroidPay" -> stripeModule?.paymentRequestWithAndroidPay(
                 ReadableMap(call.arguments as Map<String, Any>),
                 Promise(result)
             )
-            "paymentRequestWithCardForm" -> stripeModule.paymentRequestWithCardForm(
+            "paymentRequestWithCardForm" -> stripeModule?.paymentRequestWithCardForm(
                 ReadableMap(call.arguments as Map<String, Any>),
                 Promise(result)
             )
-            "createTokenWithCard" -> stripeModule.createTokenWithCard(
+            "createTokenWithCard" -> stripeModule?.createTokenWithCard(
                 ReadableMap(call.arguments as Map<String, Any>),
                 Promise(result)
             )
-            "createTokenWithBankAccount" -> stripeModule.createTokenWithBankAccount(
+            "createTokenWithBankAccount" -> stripeModule?.createTokenWithBankAccount(
                 ReadableMap(call.arguments as Map<String, Any>),
                 Promise(result)
             )
-            "createSourceWithParams" -> stripeModule.createSourceWithParams(
+            "createSourceWithParams" -> stripeModule?.createSourceWithParams(
                 ReadableMap(call.arguments as Map<String, Any>),
                 Promise(result)
             )
-            "createPaymentMethod" -> stripeModule.createPaymentMethod(
+            "createPaymentMethod" -> stripeModule?.createPaymentMethod(
                 ReadableMap(call.arguments as Map<String, Any>),
                 Promise(result)
             )
-            "authenticatePaymentIntent" -> stripeModule.authenticatePaymentIntent(
+            "authenticatePaymentIntent" -> stripeModule?.authenticatePaymentIntent(
                 ReadableMap(call.arguments as Map<String, Any>),
                 Promise(result)
             )
-            "confirmPaymentIntent" -> stripeModule.confirmPaymentIntent(
+            "confirmPaymentIntent" -> stripeModule?.confirmPaymentIntent(
                 ReadableMap(call.arguments as Map<String, Any>),
                 Promise(result)
             )
-            "authenticateSetupIntent" -> stripeModule.authenticateSetupIntent(
+            "authenticateSetupIntent" -> stripeModule?.authenticateSetupIntent(
                 ReadableMap(call.arguments as Map<String, Any>),
                 Promise(result)
             )
-            "confirmSetupIntent" -> stripeModule.confirmSetupIntent(
+            "confirmSetupIntent" -> stripeModule?.confirmSetupIntent(
                 ReadableMap(call.arguments as Map<String, Any>),
                 Promise(result)
             )
         }
     }
 
-    companion object {
 
-        @JvmStatic
-        fun registerWith(registrar: Registrar) {
-            val channel = MethodChannel(registrar.messenger(), "stripe_payment")
-            val stripeModule = StripeModule(registrar, registrar.activity())
-            val plugin = StripePaymentPlugin(stripeModule)
-            channel.setMethodCallHandler(plugin)
+    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        channel = MethodChannel(binding.binaryMessenger, "stripe_payment")
+        channel?.setMethodCallHandler(this)
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        channel?.setMethodCallHandler(null)
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        if(stripeModule == null){
+            this.stripeModule = StripeModule(binding, binding.activity);
         }
+        TODO("Not yet implemented")
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDetachedFromActivity() {
+        TODO("Not yet implemented")
     }
 }
