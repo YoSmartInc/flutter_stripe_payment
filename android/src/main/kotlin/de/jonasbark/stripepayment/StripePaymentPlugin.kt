@@ -84,18 +84,18 @@ class StripePaymentPlugin: FlutterPlugin,
         if(stripeModule == null){
             this.stripeModule = StripeModule(binding, binding.activity);
         }
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
     override fun onDetachedFromActivity() {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 }
