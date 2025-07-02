@@ -54,7 +54,7 @@ class StripeDialog : DialogFragment() {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState)
 
-        setStyle(STYLE_NO_TITLE, R.style.Theme_AppCompat_Light_Dialog)
+        setStyle(STYLE_NO_TITLE, androidx.appcompat.R.style.Theme_AppCompat_Light_Dialog)
     }
 
     override fun onCancel(dialog: DialogInterface?) {

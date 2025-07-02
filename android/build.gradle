@@ -28,7 +28,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace "com.yosmart.yolink.stripe_payment"
+    namespace "de.jonasbark.stripepayment"
     compileSdkVersion 28
 
     sourceSets {
@@ -44,6 +44,11 @@ android {
             tipsiStripeRedirectScheme: "example"
         ]
     }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    
     lintOptions {
         disable 'InvalidPackage'
     }
